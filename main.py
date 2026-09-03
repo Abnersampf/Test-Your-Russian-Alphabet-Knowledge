@@ -6,13 +6,8 @@ from time import sleep
 
 def play_sound(letra):
     mixer.init()
-    v = randint(0, 2)
-    if v == 0: 
-        mixer.music.load(f"audios/{letra[0]}{letra[1]}.mp3")
-    elif v == 1:
-        mixer.music.load(f"audios/{letra[0]}{letra[1]}(1).mp3")
-    else:
-        mixer.music.load(f"audios/{letra[0]}{letra[1]}(2).mp3")
+    v = randint(0, 3)
+    mixer.music.load(f"audios/{letra[0]}{letra[1]}({v}).mp3")
     Thread(target=lambda: mixer.music.play()).start()
 
 def check_answer(wind, button, correct_letter):
@@ -47,16 +42,17 @@ def new_window():
     options = base.copy()
     shuffle(options)
 
-    label = tk.Label(window, text="?", font=("Arial", 150))
-    label.place(x=size/2, y=0, anchor="n")
-
     window.update_idletasks()
 
     button_font = 22
     button_height = 1
     button_width = 3
 
-    n = label.winfo_height()
+    playsoundagin = tk.Button(window, text="Replay the audio", font=("Arial", 15), command=lambda: play_sound(chosen_letter))
+    playsoundagin.place(x=size/2, y=25, anchor="n")
+    window.update_idletasks()
+
+    n = playsoundagin.winfo_y() + playsoundagin.winfo_height() + 25
 
     buttons = []
 
@@ -119,9 +115,6 @@ def new_window():
     # Play the sound after the buttons have loaded in the window.
     play_sound(chosen_letter)
 
-    playsoundagin = tk.Button(window, text="Replay the audio", font=("Arial", 15), command=lambda: play_sound(chosen_letter))
-    playsoundagin.place(x=size/2, y=buttons[27].winfo_y() + buttons[27].winfo_height() + 20, anchor="n")
-
     # Start window loop
     window.mainloop()
 
@@ -144,7 +137,7 @@ size = 700
 pos_x = (window.winfo_screenwidth() // 2) - (size // 2)
 pos_y = (window.winfo_screenheight() // 2) - ((size - 200) // 2)
 
-window.geometry(f"{size}x{size - 200}+{pos_x}+{pos_y}")
+window.geometry(f"{size}x{280}+{pos_x}+{pos_y}")
 window.resizable(False, False)
 
 new_window()
